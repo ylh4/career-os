@@ -1,0 +1,2 @@
+# Artifacts — generated, staged outputs per opportunity (artifacts/<id>/...).
+# Exported .docx/.pdf are gitignored; markdown sources are tracked. Keeps dir in git.

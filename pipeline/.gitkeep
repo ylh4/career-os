@@ -1,0 +1,2 @@
+# Pipeline — one JSON file per opportunity (pipeline/<id>.json).
+# See CLAUDE.md for the schema and the state machine. This file keeps the dir in git.

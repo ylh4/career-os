@@ -1,0 +1,28 @@
+{
+  "id": "globex-platform-2026",
+  "company": "Globex",
+  "title": "Senior Staff Engineer, Developer Platform",
+  "source": "Company careers page",
+  "location": "Hybrid — Seattle, WA (2 days/week)",
+  "comp": "~$330k TC (base $250k + equity), per posting",
+  "state": "tailored",
+  "score": {
+    "total": 7,
+    "fit": 8,
+    "comp": 7,
+    "visa": 10,
+    "remote": 5,
+    "growth": 9,
+    "notes": "Developer-platform charter is a strong match for depgraph (oss-contribution) and the latency rewrite. Growth high — greenfield platform team. Remote scores low: hybrid 2 days/week is at the edge of profile preference (acceptable since Seattle-local). Weighted: 0.40*8+0.20*7+0.15*10+0.15*5+0.10*9 = 7.35 -> 7."
+  },
+  "history": [
+    { "state": "discovered", "date": "2026-05-18" },
+    { "state": "scored", "date": "2026-05-21" },
+    { "state": "tailored", "date": "2026-05-28" }
+  ],
+  "next_action": { "action": "Human review of staged resume, then submit", "due": "2026-06-06" },
+  "contacts": [],
+  "artifacts": [
+    "artifacts/globex-platform-2026/resume.md"
+  ]
+}

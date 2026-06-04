@@ -1,0 +1,33 @@
+{
+  "id": "acme-staff-eng-2026",
+  "company": "Acme Cloud",
+  "title": "Staff Software Engineer, Platform",
+  "source": "Referral — LinkedIn (Jordan Patel, EM)",
+  "location": "Remote (US)",
+  "comp": {
+    "min": 240000,
+    "max": 290000,
+    "currency": "USD",
+    "equity": "RSUs ~$120k/yr",
+    "notes": "Levels.fyi estimate for Staff; base+RSU."
+  },
+  "state": "scored",
+  "score": {
+    "total": 8,
+    "fit": 9,
+    "comp": 8,
+    "visa": 10,
+    "remote": 9,
+    "growth": 7,
+    "notes": "Strong fit: platform charter maps directly to the DB migration (team-lead-migration) and cost program (cost-savings). Comp midpoint ~$370k TC meets target. Visa N/A (US citizen). Remote-first matches profile. Growth solid but team is established (7). Weighted: 0.40*9+0.20*8+0.15*10+0.15*9+0.10*7 = 8.55 -> 8."
+  },
+  "history": [
+    { "state": "discovered", "date": "2026-05-20" },
+    { "state": "scored", "date": "2026-05-22" }
+  ],
+  "next_action": { "action": "Tailor resume (/tailor)", "due": "2026-06-08" },
+  "contacts": [
+    { "name": "Jordan Patel", "role": "Engineering Manager (referrer)", "email": "", "notes": "Met at SREcon; offered to refer." }
+  ],
+  "artifacts": []
+}

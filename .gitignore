@@ -1,0 +1,27 @@
+# Secrets & environment
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Generated binary artifacts (keep the markdown sources, ignore exported docs)
+artifacts/*.docx
+artifacts/**/*.docx
+artifacts/**/*.pdf
+
+# OS cruft
+.DS_Store
+
+# ── Private real corpus ──────────────────────────────────────────────────────
+# sample-data/ (the fictitious candidate) IS committed so the repo runs on clone.
+# If you keep your REAL corpus in this repo and do not want it version-controlled,
+# separate it and uncomment the lines below. By default corpus/ is tracked so you
+# can back it up; flip this if your fork is public.
+# corpus/profile.md
+# corpus/accomplishments/
+# corpus/stories/
+# pipeline/
