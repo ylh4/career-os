@@ -1,7 +1,7 @@
 # Stories (STAR)
 
 Longer, first-person **narrative** versions of behavioral-interview answers, in STAR form
-(Situation, Task, Action, Result). One story per file. Drawn on by `/interview-prep`. Same
+(Situation, Task, Action, Result). One story per file. Drawn on by `/prep`. Same
 provenance discipline applies — results trace back to a corpus accomplishment.
 
 Filename: kebab-case by theme — e.g. `ambiguous-mandate.md`, `stakeholder-pushback.md`.

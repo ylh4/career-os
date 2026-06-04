@@ -17,9 +17,15 @@ roles. His corpus shows the full format and a realistic remote-vs-onsite scoring
   `data-quality-program`, `churn-cohort-analysis`, `warehouse-cost-cut`.
 - `stories/` — **two** interview stories (light frontmatter + narrative):
   `ambiguous-mandate` (→ outreach-reallocation) and `stakeholder-pushback` (→ data-quality-program).
-- `pipeline/` — two opportunities in different states: `dataco-senior-bi-2026` (**scored**,
-  fully remote, top fit) and `fintrack-bi-lead-2026` (**tailored**, hybrid/relocation, lower
-  remote score).
+- `pipeline/` — two opportunities in different states: `2026-05-dataco-senior-bi` (**scored**
+  90, fully remote, top fit) and `2026-05-fintrack-bi-lead` (**tailored**, 74, hybrid/
+  relocation, lower remote score). Ids follow the kernel `YYYY-MM-<company>-<role>` convention.
+- `contacts/` — one `.md` per person referenced by a pipeline file (`priya-raman`,
+  `selam-tesfaye`).
+- `artifacts/2026-05-fintrack-bi-lead/` — staged `/tailor` output for the tailored
+  opportunity: `resume_v1.md`, `cover_v1.md`, and `provenance.md` (the tracked, reviewable
+  sources). The `.docx` deliverables are gitignored render outputs — regenerate them with
+  `python scripts/render_docx.py sample-data/artifacts/2026-05-fintrack-bi-lead/resume_v1.md sample-data/artifacts/2026-05-fintrack-bi-lead/cover_v1.md`.
 
 ## Use it as a demo
 From the repo root, lint the corpus and drive the pipeline helpers against this data:
@@ -30,10 +36,12 @@ python scripts/validate_corpus.py sample-data/accomplishments   # corpus health 
 cp sample-data/profile.md corpus/profile.md
 cp sample-data/accomplishments/*.md corpus/accomplishments/
 cp sample-data/stories/*.md corpus/stories/
+cp -r sample-data/contacts/* contacts/ 2>/dev/null; mkdir -p contacts
 cp sample-data/pipeline/*.json pipeline/
 
 python scripts/validate.py     # both BI entries should pass
 python scripts/report.py       # dashboard with the two opportunities
+python scripts/funnel.py       # funnel analytics
 ```
 
 ## Go live

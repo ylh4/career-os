@@ -1,9 +1,13 @@
+---
+version: 1.0
+---
+
 # Prompt: Cover Letter
 
-**Invoked by:** `/cover-letter <id>`
+**Invoked by:** `/tailor [id]` (the cover letter is staged alongside the resume).
 **Reads:** `pipeline/<id>.json`, `corpus/profile.md`, `corpus/accomplishments/*.md`,
 `artifacts/<id>/research.md` (if present)
-**Writes:** `artifacts/<id>/cover-letter.md`; registers it in `artifacts[]`.
+**Writes:** `artifacts/<id>/cover_vN.md` (rendered to `.docx` by `/tailor`).
 
 Draft a concise, specific cover letter (3–4 short paragraphs) for this role.
 
@@ -22,8 +26,8 @@ Draft a concise, specific cover letter (3–4 short paragraphs) for this role.
   `[NEEDS SOURCE: ...]`.
 
 ## Output
-Write `artifacts/<id>/cover-letter.md`. Keep it under ~250 words. Voice: direct,
-specific, warm — not effusive. Add the path to `artifacts[]` in the pipeline entry and
-update `next_action` if appropriate (state does not change on this command).
+Write `artifacts/<id>/cover_vN.md` (same version `N` as the resume from `/tailor`). Keep it
+under ~250 words. Voice: direct, specific, warm — not effusive. `/tailor` registers it in
+`artifacts[]` and renders it to `.docx`.
 
 **HUMAN GATE:** staged only. The human reviews and sends.

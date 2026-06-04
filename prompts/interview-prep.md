@@ -1,11 +1,17 @@
+---
+version: 1.0
+---
+
 # Prompt: Interview Prep
 
-**Invoked by:** `/interview-prep <id>`
+**Invoked by:** `/prep [id]`
 **Reads:** `pipeline/<id>.json`, `corpus/stories/*.md`, `corpus/accomplishments/*.md`,
-`corpus/profile.md`, `artifacts/<id>/research.md` (if present)
-**Writes:** `artifacts/<id>/interview-prep.md`.
+`corpus/profile.md`, `artifacts/<id>/research.md`
+**Writes:** `artifacts/<id>/prep.md`.
 
-Build a focused prep document for an upcoming interview at this company.
+Build a focused prep document for an upcoming interview at this company. First ensure a
+company brief exists: if `artifacts/<id>/research.md` is missing, produce it now via
+`prompts/company-research.md` (using the Apify RAG Web Browser), then build the prep doc.
 
 ## Sections to produce
 1. **Role & company snapshot** — 3–5 bullets from the research brief (cited). What they do,
@@ -24,6 +30,6 @@ Stories and metrics come from the corpus, verbatim on the numbers. Company facts
 the research brief or are omitted. Don't coach the candidate to claim things they can't back.
 
 ## Output
-Write `artifacts/<id>/interview-prep.md`, add it to `artifacts[]`, and update `next_action`
-(e.g. the interview date). State typically is already `screening`/`interview` — set via
-`/advance`, not here.
+Write `artifacts/<id>/prep.md`, add it (and `research.md`) to `artifacts[]`, and update
+`next_action` (e.g. the interview date). State typically is already `screening`/`interview`
+— set via `/advance`, not here.

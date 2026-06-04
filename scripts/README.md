@@ -1,19 +1,22 @@
 # Scripts
 
-Pure-stdlib Python helpers for the plumbing of Career OS. **No dependencies, no install
-step** — they run with any Python 3.9+ (`json`, `pathlib`, `datetime`, `argparse`).
-Shared schema constants live in `_schema.py` so the state machine is defined once.
+Python helpers for the plumbing of Career OS. The pipeline helpers (`new_opp`, `report`,
+`funnel`, `validate`, `validate_corpus`) are pure standard library; only `render_docx.py`
+needs a dependency (`python-docx`, installed in the project venv). Shared schema constants
+live in `_schema.py` so the state machine is defined once.
 
 Run them from the repo root.
 
-## `new_opp.py` — scaffold an opportunity  (`/add-opp`)
+## `new_opp.py` — scaffold an opportunity  (`/add-opp`, `/scan`)
 Creates `pipeline/<id>.json` in the `discovered` state. Won't overwrite an existing file.
 
 ```bash
-python scripts/new_opp.py --id acme-staff-eng --company "Acme" \
-  --title "Staff Software Engineer" --source "Referral — LinkedIn" \
-  --location "Remote (US)" --comp "~$250k" --due 2026-06-15
+python scripts/new_opp.py --id 2026-06-acme-staff-eng --company "Acme" \
+  --title "Staff Software Engineer" --source referral \
+  --url "https://..." --location "Remote (US)" --comp "~$250k" --due 2026-06-15
 ```
+
+The `id` follows the kernel convention `YYYY-MM-<company>-<role>`.
 
 ## `report.py` — pipeline dashboard  (`/status`)
 Reads all `pipeline/*.json`, prints a markdown dashboard (counts by state, top-scored
@@ -36,12 +39,31 @@ python scripts/validate_corpus.py                               # lint corpus/ac
 ```
 
 ## `validate.py` — schema check
-Validates every `pipeline/*.json`: required keys, valid state, score ints 0–10,
-chronological `{state, date}` history whose last entry matches `state`, ISO dates.
-Exits non-zero on any failure (handy in CI or a pre-commit hook).
+Validates every `pipeline/*.json`: required keys, valid state, score block (dimensions
+ints 0–10, weighted `total` 0–100, `confidence` high|medium|low), chronological
+`{state, date}` history whose last entry matches `state`, ISO dates. Exits non-zero on any
+failure (handy in CI or a pre-commit hook).
 
 ```bash
 python scripts/validate.py
+```
+
+## `render_docx.py` — markdown → .docx  (`/tailor`)
+Renders a staged markdown artifact (resume/cover letter) to the `.docx` deliverable that
+gets uploaded to an ATS. The `.md` sources and `provenance.md` are the tracked, reviewable
+artifacts; `.docx` exports are gitignored and regenerated on demand. Needs `python-docx`.
+
+```bash
+python scripts/render_docx.py artifacts/<id>/resume_v1.md artifacts/<id>/cover_v1.md
+```
+
+## `funnel.py` — funnel analytics  (`/funnel`)
+Reads every `pipeline/*.json` (via the append-only `history[]`) and writes
+`reports/funnel-<today>.md`: funnel reach & stage conversion, response rate by source, and
+average time-in-state.
+
+```bash
+python scripts/funnel.py
 ```
 
 ## `_schema.py`

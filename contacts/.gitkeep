@@ -1,0 +1,3 @@
+# Contacts — one .md per person (recruiters, referrers, recommenders).
+# Linked from pipeline files via a repo-relative path, e.g. "contacts/jordan-patel.md".
+# See sample-data/contacts/ for examples. Keeps the dir in git.

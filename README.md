@@ -25,22 +25,25 @@ Two rules keep it honest: nothing is generated that isn't traceable to your corp
 
 ```bash
 # 1. Clone / fork this repo. It runs out of the box on fictitious sample data.
-# 2. Try the helpers (pure Python stdlib — no install needed):
+# 2. Try the helpers (stdlib only, except render_docx which uses python-docx):
 python scripts/report.py                 # pipeline dashboard
-python scripts/new_opp.py --id acme-eng --company "Acme" --title "Staff Engineer" --source "LinkedIn"
+python scripts/funnel.py                  # funnel analytics
+python scripts/new_opp.py --id 2026-06-acme-staff-eng --company "Acme" \
+  --title "Staff Engineer" --source linkedin --url "https://..."
 python scripts/validate.py               # validate all pipeline/*.json
 
 # 3. Go live: replace the demo data with your own.
 cp -r sample-data/profile.md corpus/profile.md
 cp -r sample-data/accomplishments/* corpus/accomplishments/
 cp -r sample-data/stories/* corpus/stories/
+mkdir -p contacts && cp -r sample-data/contacts/* contacts/
 cp -r sample-data/pipeline/* pipeline/        # optional: start from the examples
 # then edit corpus/ to be truthfully about you.
 ```
 
 In Claude Code, use the slash commands (see `CLAUDE.md` for the full catalog):
-`/add-opp`, `/score`, `/research`, `/tailor`, `/cover-letter`, `/status`, `/advance`,
-`/follow-up`, `/interview-prep`.
+`/scan`, `/score`, `/tailor`, `/submit`, `/prefill`, `/status`, `/advance`, `/followups`,
+`/touch`, `/prep`, `/funnel` (plus `/add-opp` to add a posting by hand).
 
 ## Directory map
 
@@ -54,9 +57,10 @@ corpus/              Your ground truth.
 prompts/             The intelligence — one prompt per capability.
 pipeline/            One JSON file per opportunity (the state machine).
 artifacts/           Generated, staged outputs per opportunity (artifacts/<id>/...).
-reports/             Pipeline dashboards written by scripts/report.py.
+contacts/            One .md per person (recruiters, referrers), linked from pipeline files.
+reports/             Pipeline dashboards + funnel reports written by scripts/.
 sample-data/         A complete fictitious candidate for demos and forks.
-scripts/             Stdlib Python helpers (validate, report, new_opp).
+scripts/             Python helpers (validate, report, funnel, new_opp, render_docx).
 .claude/commands/    Slash-command definitions.
 ```
 

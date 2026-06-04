@@ -1,12 +1,16 @@
+---
+version: 1.0
+---
+
 # Prompt: Company Research
 
-**Invoked by:** `/research <id>`
+**Invoked by:** `/prep [id]` (the company brief is built as part of interview prep).
 **Reads:** `pipeline/<id>.json` (company, title, source)
 **Writes:** `artifacts/<id>/research.md`; registers it in `artifacts[]`.
-**May use:** web search / fetch and MCP tools to gather current facts.
+**May use:** the Apify RAG Web Browser (and web search/fetch) to gather current facts.
 
 Produce a structured, **cited** research brief on the company and role. This brief becomes
-the provenance source for company facts used by `/cover-letter` and `/interview-prep`.
+the provenance source for company facts used by `/tailor` (cover letter) and `/prep`.
 
 ## Sections
 1. **Overview** — what they do, stage/size, funding or public status, business model.
@@ -24,7 +28,7 @@ the provenance source for company facts used by `/cover-letter` and `/interview-
 - **Every non-obvious claim gets an inline source** (URL or tool result) with a date.
 - Distinguish **verified facts** from **inferences** — label inferences as such.
 - If a claim can't be sourced, put it under *Open questions*, not the factual sections.
-- Do not pass speculation downstream as fact; `/cover-letter` and `/interview-prep` will
+- Do not pass speculation downstream as fact; `/tailor` (cover letter) and `/prep` will
   treat this brief as ground truth for company claims.
 
 ## Output

@@ -9,9 +9,12 @@ __pycache__/
 *.pyc
 
 # Generated binary artifacts (keep the markdown sources, ignore exported docs)
+# .docx/.pdf are render outputs of render_docx.py — regenerate them from the .md sources.
 artifacts/*.docx
 artifacts/**/*.docx
 artifacts/**/*.pdf
+sample-data/artifacts/**/*.docx
+sample-data/artifacts/**/*.pdf
 
 # OS cruft
 .DS_Store
