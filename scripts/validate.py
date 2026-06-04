@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Validate every pipeline/*.json against the Career OS schema.
 
-Checks: required keys present, state is valid, score block well-formed (ints 0-10),
+Checks: required keys present, state is valid, score block well-formed (dimensions
+ints 0-10, weighted total int 0-100, confidence high|medium|low),
 history is a non-empty list of {state, date} with ISO dates in chronological order,
 the final history state matches the entry's `state`, and next_action has an ISO due date.
 
@@ -49,10 +50,17 @@ def validate_entry(path, data) -> list[str]:
         for k in SCORE_KEYS:
             if k not in score:
                 errors.append(f"score missing key: {k!r}")
-        for k in ["total", "fit", "comp", "visa", "remote", "growth"]:
+        # Dimensions are ints 0-10; the weighted total is an int 0-100.
+        for k in ["fit", "comp", "visa", "remote", "growth"]:
             v = score.get(k)
             if v is not None and (not isinstance(v, int) or isinstance(v, bool) or not 0 <= v <= 10):
                 errors.append(f"score.{k} must be an int 0-10, got {v!r}")
+        total = score.get("total")
+        if total is not None and (not isinstance(total, int) or isinstance(total, bool) or not 0 <= total <= 100):
+            errors.append(f"score.total must be an int 0-100, got {total!r}")
+        conf = score.get("confidence")
+        if conf not in (None, "", "high", "medium", "low"):
+            errors.append(f"score.confidence must be high|medium|low, got {conf!r}")
     elif score is not None:
         errors.append("score must be an object")
 

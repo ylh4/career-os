@@ -4,10 +4,13 @@
 Creates pipeline/<id>.json in the `discovered` state with the full schema skeleton.
 Refuses to overwrite an existing file. Pure standard library.
 
+The id follows the kernel convention YYYY-MM-<company-slug>-<role-slug>.
+
 Usage:
-    python scripts/new_opp.py --id acme-staff-eng --company "Acme" \
-        --title "Staff Software Engineer" --source "Referral — LinkedIn" \
-        [--location "Remote (US)"] [--comp "~$250k"] [--due 2026-06-15]
+    python scripts/new_opp.py --id 2026-06-acme-staff-eng --company "Acme" \
+        --title "Staff Software Engineer" --source referral \
+        [--url "https://..."] [--location "Remote (US)"] [--comp "~$250k"] \
+        [--due 2026-06-15]
 """
 
 from __future__ import annotations
@@ -30,6 +33,7 @@ def build_skeleton(args) -> dict:
         "company": args.company,
         "title": args.title,
         "source": args.source,
+        "url": args.url,
         "location": args.location,
         "comp": args.comp,
         "state": "discovered",
@@ -40,6 +44,7 @@ def build_skeleton(args) -> dict:
             "visa": 0,
             "remote": 0,
             "growth": 0,
+            "confidence": "",
             "notes": "",
         },
         "history": [{"state": "discovered", "date": today}],
@@ -54,10 +59,13 @@ def build_skeleton(args) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Scaffold a new pipeline opportunity.")
-    parser.add_argument("--id", required=True, help="kebab-case slug; becomes the filename")
+    parser.add_argument("--id", required=True,
+                        help="kebab-case slug YYYY-MM-<company>-<role>; becomes the filename")
     parser.add_argument("--company", required=True)
     parser.add_argument("--title", required=True)
-    parser.add_argument("--source", required=True, help="where the opportunity was found")
+    parser.add_argument("--source", required=True,
+                        help="referral | linkedin | indeed | company_site | job_board")
+    parser.add_argument("--url", default="", help="link to the posting")
     parser.add_argument("--location", default="", help="e.g. 'Remote (US)'")
     parser.add_argument("--comp", default="", help="string or leave blank")
     parser.add_argument("--action", default="", help="override the initial next_action text")

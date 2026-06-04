@@ -23,13 +23,12 @@ STATES = [
     "scored",
     "tailored",
     "applied",
-    "followed_up",
     "screening",
     "interview",
     "offer",
 ]
 # Terminal / branch states reachable from any active state.
-TERMINAL_STATES = ["rejected", "ghosted"]
+TERMINAL_STATES = ["rejected", "ghosted", "withdrawn"]
 ALL_STATES = STATES + TERMINAL_STATES
 
 # Advancing INTO this state requires explicit human confirmation (HUMAN GATE).
@@ -41,6 +40,7 @@ REQUIRED_KEYS = [
     "company",
     "title",
     "source",
+    "url",
     "location",
     "comp",
     "state",
@@ -51,7 +51,7 @@ REQUIRED_KEYS = [
     "artifacts",
 ]
 
-SCORE_KEYS = ["total", "fit", "comp", "visa", "remote", "growth", "notes"]
+SCORE_KEYS = ["total", "fit", "comp", "visa", "remote", "growth", "confidence", "notes"]
 
 
 def next_state(current: str) -> str | None:
