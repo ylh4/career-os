@@ -22,39 +22,22 @@ from _schema import (
     PIPELINE_DIR,
     dump_entry,
     is_iso_date,
-    today_iso,
+    make_entry,
 )
 
 
 def build_skeleton(args) -> dict:
-    today = today_iso()
-    return {
-        "id": args.id,
-        "company": args.company,
-        "title": args.title,
-        "source": args.source,
-        "url": args.url,
-        "location": args.location,
-        "comp": args.comp,
-        "state": "discovered",
-        "score": {
-            "total": 0,
-            "fit": 0,
-            "comp": 0,
-            "visa": 0,
-            "remote": 0,
-            "growth": 0,
-            "confidence": "",
-            "notes": "",
-        },
-        "history": [{"state": "discovered", "date": today}],
-        "next_action": {
-            "action": args.action or "Score this opportunity (/score)",
-            "due": args.due or today,
-        },
-        "contacts": [],
-        "artifacts": [],
-    }
+    return make_entry(
+        id=args.id,
+        company=args.company,
+        title=args.title,
+        source=args.source,
+        url=args.url,
+        location=args.location,
+        comp=args.comp,
+        action=args.action,
+        due=args.due,
+    )
 
 
 def main() -> int:

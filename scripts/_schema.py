@@ -9,12 +9,14 @@ See CLAUDE.md for the authoritative schema.
 from __future__ import annotations
 
 import json
+import re
 from datetime import date, datetime
 from pathlib import Path
 
 # Repo root is the parent of the scripts/ directory.
 ROOT = Path(__file__).resolve().parent.parent
 PIPELINE_DIR = ROOT / "pipeline"
+RAW_DIR = PIPELINE_DIR / "_raw"  # raw scraped postings, kept for provenance
 REPORTS_DIR = ROOT / "reports"
 
 # The Application State Machine (CLAUDE.md). Order matters for "next state" logic.
@@ -61,6 +63,59 @@ def next_state(current: str) -> str | None:
         if i + 1 < len(STATES):
             return STATES[i + 1]
     return None
+
+
+def slugify(text: str, max_len: int = 40) -> str:
+    """Lowercase, ASCII-ish, hyphen-separated slug for ids and filenames."""
+    s = re.sub(r"[^a-z0-9]+", "-", str(text).lower()).strip("-")
+    return s[:max_len].strip("-")
+
+
+def make_entry(
+    id: str,
+    company: str,
+    title: str,
+    source: str,
+    url: str = "",
+    location: str = "",
+    comp: str = "",
+    today: str | None = None,
+    action: str = "",
+    due: str = "",
+) -> dict:
+    """Return a fresh pipeline entry skeleton in the `discovered` state.
+
+    Single definition of the entry shape — used by new_opp.py and scan_ingest.py so the
+    schema lives in exactly one place (see CLAUDE.md for the authoritative schema).
+    """
+    today = today or today_iso()
+    return {
+        "id": id,
+        "company": company,
+        "title": title,
+        "source": source,
+        "url": url,
+        "location": location,
+        "comp": comp,
+        "state": "discovered",
+        "score": {
+            "total": 0,
+            "fit": 0,
+            "comp": 0,
+            "visa": 0,
+            "remote": 0,
+            "growth": 0,
+            "confidence": "",
+            "notes": "",
+        },
+        "history": [{"state": "discovered", "date": today}],
+        "next_action": {
+            "action": action or "Score this opportunity (/score)",
+            "due": due or today,
+        },
+        "contacts": [],
+        "artifacts": [],
+    }
 
 
 def is_iso_date(value: str) -> bool:

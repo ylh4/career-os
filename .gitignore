@@ -16,6 +16,10 @@ artifacts/**/*.pdf
 sample-data/artifacts/**/*.docx
 sample-data/artifacts/**/*.pdf
 
+# Raw scraped postings (third-party content; kept locally for provenance/debugging)
+pipeline/_raw/*
+!pipeline/_raw/.gitkeep
+
 # OS cruft
 .DS_Store
 

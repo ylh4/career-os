@@ -16,7 +16,21 @@ python scripts/new_opp.py --id 2026-06-acme-staff-eng --company "Acme" \
   --url "https://..." --location "Remote (US)" --comp "~$250k" --due 2026-06-15
 ```
 
-The `id` follows the kernel convention `YYYY-MM-<company>-<role>`.
+The `id` follows the kernel convention `YYYY-MM-<company>-<role>`. The entry skeleton is
+defined once in `_schema.make_entry()` and shared with `scan_ingest.py`.
+
+## `scan_ingest.py` — ingest scraped postings  (`/scan`)
+The deterministic half of `/scan`. The `/scan` command calls Apify Actors via MCP and writes
+a normalized batch of postings to a JSON file; this script dedupes them against the existing
+pipeline (by company+title+url), scaffolds new `pipeline/<id>.json` files in `discovered`, and
+saves each raw posting to `pipeline/_raw/<id>.json` for provenance. It never scores. Idempotent
+— re-running creates nothing new. `--dry-run` reports decisions without writing; `--cap` bounds
+how many new opportunities are created.
+
+```bash
+python scripts/scan_ingest.py --input pipeline/_raw/_incoming.json --cap 25 --dry-run
+python scripts/scan_ingest.py --input pipeline/_raw/_incoming.json --cap 25
+```
 
 ## `report.py` — pipeline dashboard  (`/status`)
 Reads all `pipeline/*.json`, prints a markdown dashboard (counts by state, top-scored

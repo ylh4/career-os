@@ -1,0 +1,2 @@
+# pipeline/_raw/ — raw scraped job postings saved by /scan for provenance & debugging.
+# Contents are gitignored (third-party data); this file keeps the directory in git.
