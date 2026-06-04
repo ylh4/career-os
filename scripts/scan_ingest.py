@@ -32,6 +32,7 @@ import argparse
 import json
 import sys
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit
 
 from _schema import (
     PIPELINE_DIR,
@@ -48,17 +49,34 @@ def _norm(text: str) -> str:
     return " ".join(str(text or "").lower().split())
 
 
+# Tracking/marketing params to drop from a URL before comparing — but NOT the params that
+# identify the posting (e.g. Indeed's `jk`, LinkedIn's `currentJobId`), which live in the query.
+_TRACKING_PARAMS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "trk", "tk", "from", "src", "gh_src", "ref", "referer", "referrer",
+    "gclid", "fbclid", "mc_cid", "mc_eid",
+}
+
+
 def _norm_url(url: str) -> str:
-    """Normalize a URL for dedup: drop scheme, query/fragment, and trailing slash."""
-    u = str(url or "").strip().lower()
-    for prefix in ("https://", "http://"):
-        if u.startswith(prefix):
-            u = u[len(prefix):]
-            break
-    if u.startswith("www."):
-        u = u[4:]
-    u = u.split("?", 1)[0].split("#", 1)[0]
-    return u.rstrip("/")
+    """Normalize a URL for dedup: drop scheme/www/fragment and tracking params, keep the rest.
+
+    Critically, the job-id query param (Indeed `?jk=...`, etc.) is preserved — stripping the
+    whole query string would collapse every posting on a board to one key.
+    """
+    u = str(url or "").strip()
+    if not u:
+        return ""
+    parts = urlsplit(u if "://" in u else "https://" + u)
+    host = parts.netloc.lower()
+    if host.startswith("www."):
+        host = host[4:]
+    path = parts.path.rstrip("/")
+    kept = sorted(
+        (k, v) for k, v in parse_qsl(parts.query) if k.lower() not in _TRACKING_PARAMS
+    )
+    query = urlencode(kept)
+    return f"{host}{path.lower()}" + (f"?{query}" if query else "")
 
 
 def existing_keys(entries) -> tuple[set, set]:
