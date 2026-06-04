@@ -8,7 +8,7 @@ Produce a resume tailored to this specific role, **built only from the corpus.**
 
 ## Method
 1. Read the role (`title`, and any JD captured in the pipeline entry or research brief).
-2. Select the `accomplishments/` files whose `Skills`/content best match the role.
+2. Select the `accomplishments/` files whose `tags`/content best match the role.
 3. Rewrite each selected accomplishment as a crisp, results-first resume bullet —
    **carrying its metric verbatim.** Order bullets by relevance to this role.
 4. Pull identity, headline, and summary from `profile.md`.

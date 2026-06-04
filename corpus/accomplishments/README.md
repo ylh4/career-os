@@ -4,29 +4,42 @@
 cover-letter claim. Per the PROVENANCE rule (`CLAUDE.md`), if a fact isn't in one of these
 files (or `profile.md`), it cannot appear in a generated artifact.
 
-Filename: kebab-case, descriptive — e.g. `latency-rewrite.md`, `cost-savings.md`.
+Filename: kebab-case, descriptive — e.g. `reporting-turnaround.md`, `warehouse-cost-cut.md`.
 
 ## Format
 
-```markdown
-# <Short title>
+Each file is **YAML frontmatter + a STAR-story body**:
 
-- **Role / Employer:** <title @ company>
-- **When:** <YYYY-MM> to <YYYY-MM or "present">
-- **Context:** <the situation / problem, 1–2 sentences>
-- **Action:** <what *you* specifically did>
-- **Metric:** <the quantified result — number + unit + baseline>
-- **Skills:** <comma-separated tags for matching against job descriptions>
-- **Source:** <how this is verifiable — e.g. "perf dashboard Q3'25", "promo packet",
-  "public postmortem URL", "manager attestation">
+```markdown
+---
+metric: "-62% reporting turnaround (5 days → 1.9 days)"
+tags: [sql, automation, reporting, etl]
+date: 2024-07
+source: "BI ops dashboard; manager attestation"
+---
+
+# Automated the weekly executive reporting pipeline
+
+**Situation:** The exec team waited ~5 days each week for hand-built reports.
+**Task:** Cut the turnaround without adding headcount.
+**Action:** What *you* specifically did — concrete, first person.
+**Result:** The quantified outcome — must restate the `metric` above, with its baseline.
 ```
 
+### Frontmatter keys (all required)
+| Key | Meaning |
+|---|---|
+| `metric` | The single headline quantified result — number + unit + baseline. |
+| `tags` | YAML list of skills/keywords for matching against job descriptions. |
+| `date` | `YYYY-MM` (or `YYYY-MM-DD`) — when it was achieved. |
+| `source` | Provenance trail — what you'd point to if challenged (dashboard, report, attestation, URL). |
+
 ## Rules
-- The **Metric** must be a real, defensible number (with its baseline where relevant).
-  No rounding up into fiction.
-- The **Source** is your provenance trail — what you'd point to if challenged in an
-  interview or reference check.
+- The **`metric`** must be a real, defensible number with its baseline. No rounding into fiction.
+- The body's **Result** restates that metric so resume bullets and STAR answers stay consistent.
+- The **`source`** is your provenance — the standard every generated artifact must meet.
 - Keep each file to a single accomplishment so it can be selected independently when
   tailoring to a specific role.
+- Run `python scripts/validate_corpus.py corpus/accomplishments` to lint these files.
 
 A complete set of worked examples lives in `sample-data/accomplishments/`.

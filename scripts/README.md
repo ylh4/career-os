@@ -23,6 +23,18 @@ active opportunities, overdue/due next-actions) and writes `reports/pipeline-<to
 python scripts/report.py
 ```
 
+## `validate_corpus.py` — corpus linter + health report
+Lints accomplishment files (frontmatter `{metric, tags, date, source}` + a non-empty
+STAR body) and prints a health report: per-file ✓/⚠/✗, totals, date range, and tag
+coverage. Frontmatter is parsed by a small hand-rolled parser — no PyYAML. Exits non-zero
+if any file is missing a required key or has an empty body. Takes an optional directory
+(default `corpus/accomplishments/`).
+
+```bash
+python scripts/validate_corpus.py sample-data/accomplishments   # lint the demo set
+python scripts/validate_corpus.py                               # lint corpus/accomplishments
+```
+
 ## `validate.py` — schema check
 Validates every `pipeline/*.json`: required keys, valid state, score ints 0–10,
 chronological `{state, date}` history whose last entry matches `state`, ISO dates.

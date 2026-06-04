@@ -1,0 +1,33 @@
+{
+  "id": "dataco-senior-bi-2026",
+  "company": "DataCo",
+  "title": "Senior BI Analyst (Remote)",
+  "source": "Job board — Remotive",
+  "location": "Remote (global; EU/Africa time zones)",
+  "comp": {
+    "min": 75000,
+    "max": 95000,
+    "currency": "USD",
+    "equity": "none",
+    "notes": "Posted band for remote Senior BI Analyst."
+  },
+  "state": "scored",
+  "score": {
+    "total": 9,
+    "fit": 9,
+    "comp": 8,
+    "visa": 10,
+    "remote": 10,
+    "growth": 8,
+    "notes": "Excellent fit: role wants dbt + semantic-layer self-serve BI, matching self-serve-dashboards and reporting-turnaround; cohort/retention work maps to churn-cohort-analysis and outreach-reallocation. Comp band ($75-95k) clears the $60k floor and meets the $78k target. Visa N/A — fully remote, no sponsorship needed. Remote-first global with EU/Africa overlap is ideal. Weighted: 0.40*9+0.20*8+0.15*10+0.15*10+0.10*8 = 9.0 -> 9."
+  },
+  "history": [
+    { "state": "discovered", "date": "2026-05-19" },
+    { "state": "scored", "date": "2026-05-21" }
+  ],
+  "next_action": { "action": "Tailor resume (/tailor)", "due": "2026-06-08" },
+  "contacts": [
+    { "name": "Priya Raman", "role": "Analytics Manager", "email": "", "notes": "Hiring manager named in posting." }
+  ],
+  "artifacts": []
+}
