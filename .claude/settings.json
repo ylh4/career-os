@@ -1,5 +1,33 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__apify__*",
+      "mcp__playwright__*",
+      "Bash(python3 scripts/*.py)",
+      "Bash(python scripts/*.py)",
+      "Bash(bash scripts/weekly.sh)",
+      "Bash(git status*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git diff*)",
+      "Bash(git log*)"
+    ],
+    "ask": [
+      "Bash(git push*)"
+    ]
+  },
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/guard_corpus.py\""
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit|MultiEdit|Bash",

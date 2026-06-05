@@ -141,6 +141,23 @@ call. With the dashboard's "Live" toggle on (30s reload), the page reflects chan
 python scripts/export_dashboard_data.py            # manual refresh
 ```
 
+## `guard_corpus.py` — block tailoring on a broken corpus (PreToolUse hook)
+Wired in `.claude/settings.json` as a PreToolUse hook on Write/Edit. When a write targets a
+`/tailor` deliverable (`artifacts/.../resume_vN`/`cover_vN`), it runs `validate_corpus.py` on the
+feeding corpus and **exits 2 to deny the write** if the corpus is invalid — so no document is
+generated from a broken corpus (PROVENANCE rule). Fail-open on its own errors. Not run directly.
+
+## `weekly.sh` — weekly cadence (cron / Routine)
+Runs `/scan` (headless `claude`) → `python3 scripts/funnel.py` → commits with a dated message.
+**Commit-only** by default (`WEEKLY_PUSH=1` to also push). Wire via cron
+(`0 7 * * 1 cd <repo> && ./scripts/weekly.sh >> reports/weekly.log 2>&1`) or a Claude Code
+Routine. Needs `claude` authenticated + the Apify MCP available (a Routine runs authenticated;
+bare cron may not have MCP auth).
+
+```bash
+bash scripts/weekly.sh
+```
+
 ## `_schema.py`
 Shared module — `STATES`, `REQUIRED_KEYS`, date helpers, `load_pipeline()`,
 `next_state()`, etc. Not run directly. Edit here if the schema changes, and keep it in
