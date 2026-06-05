@@ -13,7 +13,9 @@ writes two files:
 
 Then open **`reports/dashboard.html`** in a browser: a self-contained (offline, read-only)
 kanban-by-state with a clickable opportunity drawer (score breakdown, state history, raw-JSON
-toggle) plus corpus/outreach/funnel charts.
+toggle) plus corpus/outreach/funnel charts. With its **Live** toggle on (default), it reloads
+every 30s; a PostToolUse hook regenerates `reports/pipeline-data.js` whenever the pipeline
+changes, so the dashboard stays current hands-free.
 
 After running, call out the leakiest stage (lowest conversion), the best- and worst-performing
 sources, and any state where opportunities sit too long. Keep it operational.

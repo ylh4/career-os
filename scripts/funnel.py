@@ -178,36 +178,44 @@ def build_report(f: dict) -> str:
     return "\n".join(L) + "\n"
 
 
+def build_data(source: str = "live") -> dict:
+    """Assemble the window.CAREER_OS dict for the dashboard from the chosen source."""
+    dirs = SOURCES[source]
+    today = today_iso()
+    pipeline = _load_pipeline(dirs["pipeline"])
+    return {
+        "generatedAt": today,
+        "source": source,
+        "pipeline": pipeline,
+        "funnel": compute_funnel(pipeline),
+        "corpus": corpus_summary(_load_md(dirs["accomplishments"]), _load_md(dirs["stories"])),
+        "contacts": contacts_summary(_load_md(dirs["contacts"]), today),
+    }
+
+
+def write_pipeline_data(source: str = "live"):
+    """Write reports/pipeline-data{.sample}.js. live → pipeline-data.js; sample → .sample.js."""
+    data = build_data(source)
+    REPORTS_DIR.mkdir(exist_ok=True)
+    name = "pipeline-data.sample.js" if source == "sample-data" else "pipeline-data.js"
+    out = REPORTS_DIR / name
+    out.write_text("window.CAREER_OS = " + json.dumps(data, ensure_ascii=False) + ";\n", encoding="utf-8")
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Funnel report + dashboard data export.")
     ap.add_argument("--source", choices=list(SOURCES), default="live")
     args = ap.parse_args()
-    dirs = SOURCES[args.source]
     today = today_iso()
 
-    pipeline = _load_pipeline(dirs["pipeline"])
-    accomplishments = _load_md(dirs["accomplishments"])
-    stories = _load_md(dirs["stories"])
-    contacts = _load_md(dirs["contacts"])
-
-    funnel = compute_funnel(pipeline)
-    data = {
-        "generatedAt": today,
-        "source": args.source,
-        "pipeline": pipeline,
-        "funnel": funnel,
-        "corpus": corpus_summary(accomplishments, stories),
-        "contacts": contacts_summary(contacts, today),
-    }
-
+    report = build_report(compute_funnel(_load_pipeline(SOURCES[args.source]["pipeline"])))
     REPORTS_DIR.mkdir(exist_ok=True)
-    report = build_report(funnel)
     (REPORTS_DIR / f"funnel-{today}.md").write_text(report, encoding="utf-8")
-    js = "window.CAREER_OS = " + json.dumps(data, ensure_ascii=False) + ";\n"
-    (REPORTS_DIR / "pipeline-data.js").write_text(js, encoding="utf-8")
+    out = write_pipeline_data(args.source)
 
     print(report)
-    print(f"[wrote reports/funnel-{today}.md and reports/pipeline-data.js (source: {args.source})]")
+    print(f"[wrote reports/funnel-{today}.md and reports/{out.name} (source: {args.source})]")
     print("Open reports/dashboard.html to view.")
     return 0
 

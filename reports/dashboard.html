@@ -23,6 +23,8 @@
   header h1{margin:0;font-size:15px;letter-spacing:.04em;color:#fff}
   header h1 .px{color:var(--grn)}
   .meta{color:var(--mut);font-size:12px}
+  .live{margin-left:auto;color:var(--mut);font-size:12px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:5px}
+  .live #liveDot{color:var(--bd)} .live.on #liveDot{color:var(--grn)}
   .wrap{padding:16px 18px;max-width:1400px}
   .strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
   .stat{background:var(--panel);border:1px solid var(--bd);border-radius:6px;padding:8px 12px;min-width:96px}
@@ -79,13 +81,18 @@
 <header>
   <h1>career<span class="px">/</span>os</h1>
   <span class="meta" id="meta"></span>
+  <label class="live" id="liveToggle" title="Reload every 30s to reflect pipeline changes">
+    <input type="checkbox" id="liveChk" /> <span id="liveDot">●</span> live (30s)
+  </label>
 </header>
 <div id="root"></div>
 
 <div id="scrim" onclick="closeDrawer()"></div>
 <aside id="drawer"></aside>
 
-<script src="./pipeline-data.js"></script>
+<!-- committed sample loads first; the live (hook-generated) file overrides it when present -->
+<script src="./pipeline-data.sample.js"></script>
+<script src="./pipeline-data.js" onerror="void 0"></script>
 <script>
 const STATES=["discovered","scored","tailored","applied","screening","interview","offer"];
 const TERMINAL=["rejected","ghosted","withdrawn"];
@@ -197,10 +204,35 @@ function openDrawer(id){
     <h2><span class="tog">▸ raw JSON</span></h2><pre style="display:none">${esc(JSON.stringify(e,null,2))}</pre>`;
   dr.querySelector(".tog").onclick=()=>{const p=dr.querySelector("pre");p.style.display=p.style.display==="none"?"block":"none";};
   dr.classList.add("open");document.getElementById("scrim").classList.add("open");
+  history.replaceState(null,"","#opp="+encodeURIComponent(id));  // preserve view across reloads
 }
-function closeDrawer(){document.getElementById("drawer").classList.remove("open");document.getElementById("scrim").classList.remove("open");}
+function closeDrawer(){
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("scrim").classList.remove("open");
+  history.replaceState(null,"",location.pathname+location.search);
+}
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDrawer();});
+
+function restoreHash(){
+  const m=/[#&]opp=([^&]+)/.exec(location.hash||"");
+  if(m){const id=decodeURIComponent(m[1]); if(BY_ID[id]) openDrawer(id);}
+}
+function initLive(){
+  const KEY="careeros.live", chk=document.getElementById("liveChk"), lbl=document.getElementById("liveToggle");
+  let timer=null;
+  const set=(on)=>{
+    localStorage.setItem(KEY,on?"1":"0"); chk.checked=on; lbl.classList.toggle("on",on);
+    if(timer){clearInterval(timer);timer=null;}
+    if(on) timer=setInterval(()=>location.reload(),30000);  // re-reads the freshly-exported data
+  };
+  const saved=localStorage.getItem(KEY);
+  set(saved===null?true:saved==="1");                        // default ON
+  chk.addEventListener("change",()=>set(chk.checked));
+}
+
 render();
+restoreHash();
+initLive();
 </script>
 </body>
 </html>

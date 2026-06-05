@@ -125,7 +125,21 @@ renders). `--source sample-data` analyzes the demo set instead of the live dirs.
 python scripts/funnel.py                      # live dirs
 python scripts/funnel.py --source sample-data # demo set → committed dashboard snapshot
 ```
-Then open `reports/dashboard.html` (self-contained, offline, read-only).
+Then open `reports/dashboard.html` (self-contained, offline, read-only). `--source live` writes
+`reports/pipeline-data.js` (gitignored, live); `--source sample-data` writes the committed
+`reports/pipeline-data.sample.js` (the on-clone demo). The dashboard loads the sample, then the
+live file overrides it when present.
+
+## `export_dashboard_data.py` — refresh dashboard data (PostToolUse hook)
+Regenerates `reports/pipeline-data.js` from the live pipeline. Run bare to refresh manually, or
+with `--hook` (wired in `.claude/settings.json`) to auto-refresh: it reads the tool event on
+stdin and only regenerates when a pipeline file changed (a Write/Edit under `pipeline/*.json`,
+or a Bash command running a pipeline mutator). Fail-safe — always exits 0, never disrupts a tool
+call. With the dashboard's "Live" toggle on (30s reload), the page reflects changes hands-free.
+
+```bash
+python scripts/export_dashboard_data.py            # manual refresh
+```
 
 ## `_schema.py`
 Shared module — `STATES`, `REQUIRED_KEYS`, date helpers, `load_pipeline()`,
