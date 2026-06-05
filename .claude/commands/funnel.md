@@ -4,13 +4,16 @@ description: Compute funnel conversion, response rate by source, and time-in-sta
 
 Show funnel analytics for the pipeline.
 
-Run `python scripts/funnel.py`. It reads every `pipeline/*.json` (using the append-only
-`history[]`) and writes `reports/funnel-<today>.md` with:
-- **Funnel reach & conversion** — how many opportunities reached each linear state and the
-  stage-to-stage conversion rate, plus terminal outcomes.
-- **Response rate by source** — of opportunities that reached `applied`, the share that drew
-  a real response (reached `screening`+), grouped by `source`.
-- **Time-in-state** — average days between entering a state and the next transition.
+Run `python scripts/funnel.py` (add `--source sample-data` to analyze the demo set). It reads
+every `pipeline/*.json` (using the append-only `history[]`), plus the corpus and contacts, and
+writes two files:
+- `reports/funnel-<today>.md` — **funnel reach & conversion**, **response rate by source**,
+  **time-in-state**, and the **active-application count** (out vs. active overall).
+- `reports/pipeline-data.js` — the data the dashboard reads.
 
-After running, call out the leakiest stage (lowest conversion), the best- and worst-
-performing sources, and any state where opportunities sit too long. Keep it operational.
+Then open **`reports/dashboard.html`** in a browser: a self-contained (offline, read-only)
+kanban-by-state with a clickable opportunity drawer (score breakdown, state history, raw-JSON
+toggle) plus corpus/outreach/funnel charts.
+
+After running, call out the leakiest stage (lowest conversion), the best- and worst-performing
+sources, and any state where opportunities sit too long. Keep it operational.

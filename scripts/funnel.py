@@ -1,77 +1,88 @@
 #!/usr/bin/env python3
-"""Compute Career OS funnel analytics and write a report.
+"""Career OS analytics — funnel report + dashboard data export.
 
-From every pipeline/*.json (using each entry's append-only history[]) it computes:
-  - Funnel reach & conversion: how many opportunities reached each linear state, and
-    the stage-to-stage conversion rate.
-  - Response rate by source: of opportunities that reached `applied`, the share that
-    drew a real response (reached `screening` or later), grouped by `source`.
-  - Time-in-state: average days spent in each state, from consecutive history dates.
+Reads a candidate's pipeline (+ corpus + contacts) and computes:
+  - Funnel reach & conversion across the linear states.
+  - Response rate by source (of those that reached `applied`, the share reaching `screening`+).
+  - Average time-in-state (from each entry's append-only history).
+  - Active-application counts (active = non-terminal; applied = currently out).
 
-Writes reports/funnel-<today>.md and echoes it to stdout. Pure standard library.
+Writes `reports/funnel-<today>.md` (human report) and `reports/pipeline-data.js` (the data the
+self-contained `reports/dashboard.html` reads). Read-only over the corpus/pipeline. Stdlib only.
 
 Usage:
-    python scripts/funnel.py
+    python scripts/funnel.py                     # live dirs (pipeline/, corpus/, contacts/)
+    python scripts/funnel.py --source sample-data  # the fictitious demo set
 """
 
 from __future__ import annotations
 
+import argparse
+import json
 import sys
 from collections import defaultdict
 from datetime import date
 
 from _schema import (
     REPORTS_DIR,
+    ROOT,
     STATES,
     TERMINAL_STATES,
     is_iso_date,
-    load_pipeline,
+    parse_frontmatter,
     today_iso,
 )
 
-# A "response" means the opportunity reached at least this far.
 RESPONSE_STATES = {"screening", "interview", "offer"}
+
+# Where each input lives, per --source. live mirrors the kernel layout; sample-data is flat.
+SOURCES = {
+    "live": {"pipeline": "pipeline", "contacts": "contacts",
+             "accomplishments": "corpus/accomplishments", "stories": "corpus/stories"},
+    "sample-data": {"pipeline": "sample-data/pipeline", "contacts": "sample-data/contacts",
+                    "accomplishments": "sample-data/accomplishments", "stories": "sample-data/stories"},
+}
+
+
+# ── loaders (source-parameterized) ───────────────────────────────────────────
+def _load_pipeline(base) -> list[dict]:
+    d = ROOT / base
+    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted(d.glob("*.json"))] if d.exists() else []
+
+
+def _load_md(base):
+    d = ROOT / base
+    if not d.exists():
+        return []
+    out = []
+    for p in sorted(d.glob("*.md")):
+        if p.name.lower() == "readme.md":
+            continue
+        fm, body = parse_frontmatter(p.read_text(encoding="utf-8"))
+        out.append((p, fm, body))
+    return out
 
 
 def states_reached(entry: dict) -> set[str]:
-    """All states an entry has ever been in (from history, plus current state)."""
     reached = {h.get("state") for h in entry.get("history", []) if isinstance(h, dict)}
     reached.add(entry.get("state"))
     return {s for s in reached if s}
 
 
-def _pct(num: int, den: int) -> str:
-    return f"{(100 * num / den):.0f}%" if den else "—"
-
-
-def build_report(entries) -> str:
-    data = [d for _, d in entries]
-    L: list[str] = []
-    today = today_iso()
-    L += [f"# Funnel Report — {today}", "", f"Total opportunities: **{len(data)}**", ""]
-
-    # ── Funnel reach & conversion ────────────────────────────────────────────
+# ── metrics ──────────────────────────────────────────────────────────────────
+def compute_funnel(data: list[dict]) -> dict:
     reach = {s: 0 for s in STATES}
     for d in data:
         rs = states_reached(d)
         for s in STATES:
             if s in rs:
                 reach[s] += 1
-
-    L += ["## Funnel (reach & conversion)", "", "| State | Reached | Conversion from prev |", "|---|---|---|"]
+    conversion = {}
     prev = None
     for s in STATES:
-        conv = _pct(reach[s], reach[prev]) if prev else "—"
-        L.append(f"| {s} | {reach[s]} | {conv} |")
+        conversion[s] = round(100 * reach[s] / reach[prev]) if prev and reach[prev] else None
         prev = s
-    L.append("")
 
-    # Terminal outcomes.
-    term = {s: sum(1 for d in data if d.get("state") == s) for s in TERMINAL_STATES}
-    if any(term.values()):
-        L += ["**Terminal outcomes:** " + ", ".join(f"{s} {n}" for s, n in term.items() if n), ""]
-
-    # ── Response rate by source ──────────────────────────────────────────────
     applied_by_src: dict[str, int] = defaultdict(int)
     responded_by_src: dict[str, int] = defaultdict(int)
     for d in data:
@@ -81,18 +92,12 @@ def build_report(entries) -> str:
             applied_by_src[src] += 1
             if rs & RESPONSE_STATES:
                 responded_by_src[src] += 1
+    response_by_source = {
+        src: {"applied": applied_by_src[src], "responded": responded_by_src[src],
+              "rate": round(100 * responded_by_src[src] / applied_by_src[src]) if applied_by_src[src] else None}
+        for src in sorted(applied_by_src)
+    }
 
-    L += ["## Response rate by source", "", "_Of opportunities that reached `applied`, the share that reached `screening`+._", ""]
-    if applied_by_src:
-        L += ["| Source | Applied | Responded | Rate |", "|---|---|---|---|"]
-        for src in sorted(applied_by_src):
-            a, r = applied_by_src[src], responded_by_src[src]
-            L.append(f"| {src} | {a} | {r} | {_pct(r, a)} |")
-    else:
-        L.append("_No opportunities have reached `applied` yet._")
-    L.append("")
-
-    # ── Time-in-state ────────────────────────────────────────────────────────
     durations: dict[str, list[int]] = defaultdict(list)
     for d in data:
         hist = [h for h in d.get("history", []) if isinstance(h, dict) and is_iso_date(h.get("date", ""))]
@@ -103,29 +108,107 @@ def build_report(entries) -> str:
                 continue
             if days >= 0:
                 durations[hist[i]["state"]].append(days)
+    time_in_state = {s: {"transitions": len(v), "avgDays": round(sum(v) / len(v), 1)}
+                     for s, v in durations.items() if v}
 
-    L += ["## Time-in-state (avg days)", "", "_Average days between entering a state and the next transition._", ""]
-    if durations:
+    terminal = {s: sum(1 for d in data if d.get("state") == s) for s in TERMINAL_STATES}
+    active = sum(1 for d in data if d.get("state") not in TERMINAL_STATES)
+    applied = sum(1 for d in data if d.get("state") == "applied")
+
+    return {"total": len(data), "reach": reach, "conversion": conversion,
+            "responseBySource": response_by_source, "timeInState": time_in_state,
+            "terminal": terminal, "active": active, "applied": applied}
+
+
+def corpus_summary(accomplishments, stories) -> dict:
+    tags: dict[str, int] = defaultdict(int)
+    dates = []
+    for _, fm, _ in accomplishments:
+        for t in fm.get("tags", []) if isinstance(fm.get("tags"), list) else []:
+            tags[t] += 1
+        if fm.get("date"):
+            dates.append(str(fm["date"]))
+    return {"accomplishments": len(accomplishments), "stories": len(stories),
+            "tags": dict(sorted(tags.items(), key=lambda kv: (-kv[1], kv[0]))),
+            "dateRange": [min(dates), max(dates)] if dates else []}
+
+
+def contacts_summary(contacts, today: str) -> list[dict]:
+    out = []
+    for _, fm, _ in contacts:
+        nxt = fm.get("next_touch", "")
+        out.append({"name": fm.get("name", ""), "company": fm.get("company", ""),
+                    "relationship": fm.get("relationship", ""),
+                    "last_touch": fm.get("last_touch", ""), "next_touch": nxt,
+                    "overdue": bool(is_iso_date(nxt) and nxt <= today)})
+    return out
+
+
+# ── outputs ──────────────────────────────────────────────────────────────────
+def _pct(v):
+    return f"{v}%" if v is not None else "—"
+
+
+def build_report(f: dict) -> str:
+    today = today_iso()
+    L = [f"# Funnel Report — {today}", "", f"Total opportunities: **{f['total']}**",
+         f"Active applications: **{f['applied']}** out · **{f['active']}** active overall", ""]
+    L += ["## Funnel (reach & conversion)", "", "| State | Reached | Conversion from prev |", "|---|---|---|"]
+    for s in STATES:
+        L.append(f"| {s} | {f['reach'][s]} | {_pct(f['conversion'][s])} |")
+    L.append("")
+    if any(f["terminal"].values()):
+        L += ["**Terminal outcomes:** " + ", ".join(f"{s} {n}" for s, n in f["terminal"].items() if n), ""]
+    L += ["## Response rate by source", ""]
+    if f["responseBySource"]:
+        L += ["| Source | Applied | Responded | Rate |", "|---|---|---|---|"]
+        for src, r in f["responseBySource"].items():
+            L.append(f"| {src} | {r['applied']} | {r['responded']} | {_pct(r['rate'])} |")
+    else:
+        L.append("_No opportunities have reached `applied` yet._")
+    L += ["", "## Time-in-state (avg days)", ""]
+    if f["timeInState"]:
         L += ["| State | Transitions | Avg days |", "|---|---|---|"]
         for s in STATES + TERMINAL_STATES:
-            vals = durations.get(s)
-            if vals:
-                L.append(f"| {s} | {len(vals)} | {sum(vals) / len(vals):.1f} |")
+            t = f["timeInState"].get(s)
+            if t:
+                L.append(f"| {s} | {t['transitions']} | {t['avgDays']} |")
     else:
         L.append("_Not enough history to measure time-in-state._")
-    L.append("")
-
     return "\n".join(L) + "\n"
 
 
 def main() -> int:
-    entries = load_pipeline()
-    report = build_report(entries)
+    ap = argparse.ArgumentParser(description="Funnel report + dashboard data export.")
+    ap.add_argument("--source", choices=list(SOURCES), default="live")
+    args = ap.parse_args()
+    dirs = SOURCES[args.source]
+    today = today_iso()
+
+    pipeline = _load_pipeline(dirs["pipeline"])
+    accomplishments = _load_md(dirs["accomplishments"])
+    stories = _load_md(dirs["stories"])
+    contacts = _load_md(dirs["contacts"])
+
+    funnel = compute_funnel(pipeline)
+    data = {
+        "generatedAt": today,
+        "source": args.source,
+        "pipeline": pipeline,
+        "funnel": funnel,
+        "corpus": corpus_summary(accomplishments, stories),
+        "contacts": contacts_summary(contacts, today),
+    }
+
     REPORTS_DIR.mkdir(exist_ok=True)
-    out = REPORTS_DIR / f"funnel-{today_iso()}.md"
-    out.write_text(report, encoding="utf-8")
+    report = build_report(funnel)
+    (REPORTS_DIR / f"funnel-{today}.md").write_text(report, encoding="utf-8")
+    js = "window.CAREER_OS = " + json.dumps(data, ensure_ascii=False) + ";\n"
+    (REPORTS_DIR / "pipeline-data.js").write_text(js, encoding="utf-8")
+
     print(report)
-    print(f"[written to {out.relative_to(REPORTS_DIR.parent)}]")
+    print(f"[wrote reports/funnel-{today}.md and reports/pipeline-data.js (source: {args.source})]")
+    print("Open reports/dashboard.html to view.")
     return 0
 
 

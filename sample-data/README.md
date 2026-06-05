@@ -46,9 +46,18 @@ cp -r sample-data/contacts/* contacts/ 2>/dev/null; mkdir -p contacts
 cp sample-data/pipeline/*.json pipeline/
 
 python scripts/validate.py     # both BI entries should pass
-python scripts/report.py       # dashboard with the two opportunities
-python scripts/funnel.py       # funnel analytics
+python scripts/report.py       # text dashboard
+python scripts/funnel.py       # funnel analytics + reports/pipeline-data.js
 ```
+
+Or, without copying anything, build the visual dashboard straight from this demo set:
+
+```bash
+python scripts/funnel.py --source sample-data   # writes reports/pipeline-data.js
+open reports/dashboard.html                      # self-contained, offline, read-only
+```
+The committed `reports/pipeline-data.js` is already this sample snapshot, so
+`reports/dashboard.html` is viewable immediately on clone.
 
 ## Go live
 Once you've seen it work, replace the copied files with your own truthful corpus and delete

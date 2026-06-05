@@ -114,14 +114,18 @@ artifacts; `.docx` exports are gitignored and regenerated on demand. Needs `pyth
 python scripts/render_docx.py artifacts/<id>/resume_v1.md artifacts/<id>/cover_v1.md
 ```
 
-## `funnel.py` — funnel analytics  (`/funnel`)
-Reads every `pipeline/*.json` (via the append-only `history[]`) and writes
-`reports/funnel-<today>.md`: funnel reach & stage conversion, response rate by source, and
-average time-in-state.
+## `funnel.py` — funnel analytics + dashboard data  (`/funnel`)
+Reads the pipeline (+ corpus + contacts) and writes two files: `reports/funnel-<today>.md`
+(funnel reach & conversion, response rate by source, time-in-state, active-application count)
+and `reports/pipeline-data.js` (`window.CAREER_OS = {…}` — the data `reports/dashboard.html`
+renders). `--source sample-data` analyzes the demo set instead of the live dirs. The committed
+`pipeline-data.js` is the sample snapshot; running `/funnel` regenerates it from your live data.
 
 ```bash
-python scripts/funnel.py
+python scripts/funnel.py                      # live dirs
+python scripts/funnel.py --source sample-data # demo set → committed dashboard snapshot
 ```
+Then open `reports/dashboard.html` (self-contained, offline, read-only).
 
 ## `_schema.py`
 Shared module — `STATES`, `REQUIRED_KEYS`, date helpers, `load_pipeline()`,
