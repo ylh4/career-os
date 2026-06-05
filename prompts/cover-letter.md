@@ -19,11 +19,16 @@ Draft a concise, specific cover letter (3–4 short paragraphs) for this role.
 3. **Fit & forward** — how the candidate's targets (`profile.md`) align with the role;
    a confident, non-generic close.
 
+## ATS keywords (corpus-true only)
+Mirror the posting's key terms where the corpus genuinely supports them; never assert a skill
+or tool the corpus can't back just to match the JD — that becomes a `GAP:` instead.
+
 ## PROVENANCE — the hard rule
-- Every claim about the candidate traces to `accomplishments/` or `profile.md`.
+- Every claim about the candidate traces to `accomplishments/` or `profile.md`, and must
+  appear as a row in the shared `provenance.md` footnote list.
 - Every claim about the company traces to the research brief (or is omitted).
-- No invented metrics, no flattery that asserts facts you can't source. Mark gaps
-  `[NEEDS SOURCE: ...]`.
+- No invented metrics, no flattery that asserts facts you can't source. Flag anything the
+  corpus can't support as a `GAP:` for the provenance map rather than writing it.
 
 ## Output
 Write `artifacts/<id>/cover_vN.md` (same version `N` as the resume from `/tailor`). Keep it

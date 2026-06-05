@@ -8,9 +8,11 @@ Tailor a resume and cover letter for the opportunity `$ARGUMENTS`.
 First run `python scripts/validate_corpus.py` — **refuse to tailor on a failing corpus.**
 
 Follow `prompts/tailor-resume.md` exactly (it folds in `prompts/cover-letter.md`). Read
-`pipeline/$ARGUMENTS.json`, `corpus/profile.md`, `corpus/accomplishments/*.md`, and
-`artifacts/$ARGUMENTS/research.md` if present. Pick the next version `N`, then stage, all
-**only** from the corpus:
+`pipeline/$ARGUMENTS.json`, `corpus/profile.md`, `corpus/accomplishments/*.md`, the posting JD
+(`pipeline/_raw/$ARGUMENTS.json` and/or `artifacts/$ARGUMENTS/research.md`), and the research
+brief if present. Extract the JD's key terms and **mirror the posting's wording only where the
+corpus supports it** (ATS-aware); anything unsupported becomes a `GAP:`, never invented. Pick
+the next version `N`, then stage, all **only** from the corpus:
 - `artifacts/$ARGUMENTS/resume_vN.md`
 - `artifacts/$ARGUMENTS/cover_vN.md`
 - `artifacts/$ARGUMENTS/provenance.md` (each claim → source file)

@@ -26,6 +26,14 @@ Never overwrite a previous version — each `/tailor` run stages a fresh `vN`.
 5. Draft the cover letter (3–4 short paragraphs, under ~250 words) following
    `prompts/cover-letter.md`: hook (company, from the research brief), proof (1–2
    corpus accomplishments with real metrics), fit & forward.
+6. **ATS keywords (corpus-true only).** Pull the posting's key terms from the JD
+   (`pipeline/<id>.json` description, `pipeline/_raw/<id>.json`, or `research.md`): tools,
+   skills, methods, and the role's exact title phrasing. For each term the corpus genuinely
+   supports, **mirror the posting's wording** in a bullet/skill where it already fits (e.g.
+   corpus says "Power BI", JD says "Power BI dashboards" → use "Power BI dashboards"). A term
+   the corpus **cannot** back is never added to the résumé — it becomes a `GAP:` (the
+   provenance rule beats keyword-matching). No keyword stuffing, no keyword-only lines; bullets
+   stay results-first and every word stays traceable.
 
 ## PROVENANCE — the hard rule
 - Every résumé bullet and every cover-letter claim must trace to a specific
@@ -38,9 +46,15 @@ Never overwrite a previous version — each `/tailor` run stages a fresh `vN`.
 1. `artifacts/<id>/resume_vN.md` — Header (name/contact from profile), Summary, Experience
    (selected bullets grouped by employer), Skills, Education (if in corpus).
 2. `artifacts/<id>/cover_vN.md` — the cover letter.
-3. `artifacts/<id>/provenance.md` — a table mapping **each claim → source file** (e.g.
-   `"-62% reporting turnaround" → accomplishments/reporting-turnaround.md`), plus any `GAP:`
-   flags. This file ships with every tailored resume (HARD RULE 1).
+3. `artifacts/<id>/provenance.md` — the audit footnote list. It must contain **one row for
+   every résumé bullet and every cover-letter claim**, mapping the claim → its exact source
+   (file + the metric/line it rests on), e.g.
+   `"-62% reporting turnaround (5d→1.9d)" → accomplishments/reporting-turnaround.md`. End with
+   a **`## GAP` section** listing every posting requirement the corpus could not support (what
+   was asked, why it's unsupported) — these were flagged in the drafts, never invented. If a
+   reviewer can't trace a line to a row here, that line is a bug. (Markers stay *out* of the
+   résumé/cover themselves — provenance.md is the reviewer's sheet.) This file ships with every
+   tailored resume (HARD RULE 1).
 4. Render the two `.docx` deliverables:
    ```bash
    python scripts/render_docx.py artifacts/<id>/resume_vN.md artifacts/<id>/cover_vN.md

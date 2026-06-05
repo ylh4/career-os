@@ -17,15 +17,17 @@ roles. His corpus shows the full format and a realistic remote-vs-onsite scoring
   `data-quality-program`, `churn-cohort-analysis`, `warehouse-cost-cut`.
 - `stories/` — **two** interview stories (light frontmatter + narrative):
   `ambiguous-mandate` (→ outreach-reallocation) and `stakeholder-pushback` (→ data-quality-program).
-- `pipeline/` — two opportunities in different states: `2026-05-dataco-senior-bi` (**scored**
-  90, fully remote, top fit) and `2026-05-fintrack-bi-lead` (**tailored**, 74, hybrid/
-  relocation, lower remote score). Ids follow the kernel `YYYY-MM-<company>-<role>` convention.
+- `pipeline/` — three opportunities across states: `2026-05-dataco-senior-bi` (**scored** 90,
+  fully remote, top fit), `2026-05-fintrack-bi-lead` (**tailored** 74, hybrid/relocation), and
+  `2026-06-meridian-sr-bi` (**tailored** 88, remote, priority — the `/tailor` demo). Ids follow
+  the kernel `YYYY-MM-<company>-<role>` convention.
 - `contacts/` — one `.md` per person referenced by a pipeline file (`priya-raman`,
-  `selam-tesfaye`).
-- `artifacts/2026-05-fintrack-bi-lead/` — staged `/tailor` output for the tailored
-  opportunity: `resume_v1.md`, `cover_v1.md`, and `provenance.md` (the tracked, reviewable
-  sources). The `.docx` deliverables are gitignored render outputs — regenerate them with
-  `python scripts/render_docx.py sample-data/artifacts/2026-05-fintrack-bi-lead/resume_v1.md sample-data/artifacts/2026-05-fintrack-bi-lead/cover_v1.md`.
+  `selam-tesfaye`, `sara-mehari`).
+- `artifacts/<id>/` — staged `/tailor` output: `resume_v1.md`, `cover_v1.md`, `provenance.md`
+  (and a `research.md` brief for Meridian) — the tracked, reviewable sources. The `.docx`
+  deliverables are gitignored render outputs; regenerate with e.g.
+  `python scripts/render_docx.py sample-data/artifacts/2026-06-meridian-sr-bi/resume_v1.md sample-data/artifacts/2026-06-meridian-sr-bi/cover_v1.md`.
+  `2026-06-meridian-sr-bi/provenance.md` is the worked example of the provenance map + GAP list.
 
 ## Use it as a demo
 From the repo root, lint the corpus and drive the pipeline helpers against this data:

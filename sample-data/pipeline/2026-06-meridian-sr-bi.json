@@ -1,0 +1,35 @@
+{
+  "id": "2026-06-meridian-sr-bi",
+  "company": "Meridian Health",
+  "title": "Senior BI Analyst",
+  "source": "referral",
+  "url": "https://careers.meridianhealth.example/jobs/2026-senior-bi-analyst",
+  "location": "Remote (US; global contractors via EOR)",
+  "comp": "$118–135k",
+  "state": "tailored",
+  "score": {
+    "total": 88,
+    "fit": 9,
+    "comp": 8,
+    "visa": 9,
+    "remote": 10,
+    "growth": 8,
+    "confidence": "high",
+    "notes": "Strong fit: Senior BI Analyst for a health-data org wanting governed self-serve BI on a modern stack — maps to self-serve-dashboards (semantic layer + Looker), reporting-turnaround (dbt + Power BI), data-quality-program (dbt tests + data dictionary), and churn-cohort-analysis (cohort/retention). comp 8: $118-135k well above the $78k target. visa 9: fully remote, open to global contractors via EOR per the posting — no sponsorship needed. remote 10: remote-first, async-friendly. growth 8: decision-support ownership at a growing health org. Weighted (0-100): 9*3+8*2+9*2+10*1.5+8*1.5 = 27+16+18+15+12 = 88 -> priority (>=80). NB: posting also wants healthcare/claims-data experience and analyst people-management the corpus lacks — see provenance GAP."
+  },
+  "history": [
+    { "state": "discovered", "date": "2026-06-02" },
+    { "state": "scored", "date": "2026-06-03" },
+    { "state": "tailored", "date": "2026-06-04" }
+  ],
+  "next_action": { "action": "Human review of staged resume/cover, then /submit", "due": "2026-06-08" },
+  "contacts": [
+    "contacts/sara-mehari.md"
+  ],
+  "artifacts": [
+    "artifacts/2026-06-meridian-sr-bi/resume_v1.docx",
+    "artifacts/2026-06-meridian-sr-bi/cover_v1.docx",
+    "artifacts/2026-06-meridian-sr-bi/provenance.md",
+    "artifacts/2026-06-meridian-sr-bi/research.md"
+  ]
+}
