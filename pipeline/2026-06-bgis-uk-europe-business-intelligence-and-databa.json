@@ -1,0 +1,36 @@
+{
+  "id": "2026-06-bgis-uk-europe-business-intelligence-and-databa",
+  "company": "BGIS UK & Europe",
+  "title": "Business Intelligence and Database Lead",
+  "source": "linkedin",
+  "url": "https://www.linkedin.com/jobs/view/4385274406",
+  "location": "West Midlands, England, United Kingdom (office-based)",
+  "comp": "£50,000 - £60,000/yr",
+  "state": "scored",
+  "score": {
+    "total": 60,
+    "fit": 9,
+    "comp": 6,
+    "visa": 3,
+    "remote": 2,
+    "growth": 8,
+    "confidence": "low",
+    "notes": "fit 9: BI & Database Lead — Power BI/DAX, Snowflake, SQL, ETL/ELT, data governance, data dictionaries/metadata, data-quality monitoring, self-serve BI — maps directly to data-quality-program (dbt tests + data dictionary), self-serve-dashboards, warehouse-cost-cut (Snowflake/BigQuery), and reporting-turnaround. comp 6: £50-60k (~$63-76k), clears floor, below target. visa 3 (low conf): Midlands UK, office-based with travel — relocation+sponsorship needed; sponsorship unstated. remote 2: onsite. growth 8: lead role, enterprise scope, predictive analytics + governance ownership. Weighted: 9*3+6*2+3*2+2*1.5+8*1.5 = 27+12+6+3+12 = 60 → standard (borderline)."
+  },
+  "history": [
+    {
+      "state": "discovered",
+      "date": "2026-06-04"
+    },
+    {
+      "state": "scored",
+      "date": "2026-06-04"
+    }
+  ],
+  "next_action": {
+    "action": "Decide before investing: strong fit but onsite UK — confirm visa sponsorship is on offer",
+    "due": "2026-06-11"
+  },
+  "contacts": [],
+  "artifacts": []
+}

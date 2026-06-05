@@ -1,0 +1,36 @@
+{
+  "id": "2026-06-bodycote-senior-bi-developer",
+  "company": "Bodycote",
+  "title": "Senior BI Developer",
+  "source": "linkedin",
+  "url": "https://www.linkedin.com/jobs/view/4416515536",
+  "location": "Macclesfield, England, United Kingdom (hybrid)",
+  "comp": "£50,000.00/yr - £60,000.00/yr",
+  "state": "scored",
+  "score": {
+    "total": 51,
+    "fit": 7,
+    "comp": 6,
+    "visa": 3,
+    "remote": 2,
+    "growth": 6,
+    "confidence": "low",
+    "notes": "fit 7: MS-stack BI dev (SQL Server, Azure SQL, SSIS, ADF, Power BI, ETL, data modeling) maps to Power BI/ETL/modeling in self-serve-dashboards, reporting-turnaround, and data-quality-program, though it leans DBA/SSIS/SAP-HANA where the corpus is thinner. comp 6: £50-60k (~$63-76k) clears the $60k floor, below the $78k target. visa 3 (low conf): Macclesfield UK, hybrid/onsite — needs relocation+sponsorship per profile; posting is silent on sponsorship, scored conservatively. remote 2: hybrid onsite, conflicts with remote-first. growth 6: senior IC at a multinational. Weighted: 7*3+6*2+3*2+2*1.5+6*1.5 = 21+12+6+3+9 = 51 → backup (<60)."
+  },
+  "history": [
+    {
+      "state": "discovered",
+      "date": "2026-06-04"
+    },
+    {
+      "state": "scored",
+      "date": "2026-06-04"
+    }
+  ],
+  "next_action": {
+    "action": "Park (backup tier) — onsite UK needs sponsorship; revisit only if pipeline thins",
+    "due": "2026-06-18"
+  },
+  "contacts": [],
+  "artifacts": []
+}

@@ -1,0 +1,36 @@
+{
+  "id": "2026-06-tekion-senior-certification-program-man",
+  "company": "Tekion",
+  "title": "Senior Certification Program Manager",
+  "source": "indeed",
+  "url": "https://www.indeed.com/viewjob?jk=853201e87fbbb66d",
+  "location": "Remote (US)",
+  "comp": "$88,500 - $147,500 a year",
+  "state": "scored",
+  "score": {
+    "total": 57,
+    "fit": 3,
+    "comp": 10,
+    "visa": 5,
+    "remote": 8,
+    "growth": 4,
+    "confidence": "low",
+    "notes": "fit 3: this is a certification/learning Program Manager role (exam/item-bank design, psychometrics/Angoff, LMS — Caveon Scorpion, SkillJar); BI tooling (Power BI/Tableau) is only 'a plus.' Little overlap with the corpus's analytics-engineering work — not inflating a match that isn't there. comp 10: $88.5-147.5k, well above the $78k target. visa 5 (low conf): remote US; eligibility for a non-US resident is unstated, scored ≤5 conservatively. remote 8: fully remote (US-anchored hours, ~4-6h overlap). growth 4: off Dawit's analytics-engineering trajectory. Weighted: 3*3+10*2+5*2+8*1.5+4*1.5 = 9+20+10+12+6 = 57 → backup. Off-target role despite strong comp."
+  },
+  "history": [
+    {
+      "state": "discovered",
+      "date": "2026-06-04"
+    },
+    {
+      "state": "scored",
+      "date": "2026-06-04"
+    }
+  ],
+  "next_action": {
+    "action": "Park — off-target (learning/cert PM, not analytics)",
+    "due": "2026-06-18"
+  },
+  "contacts": [],
+  "artifacts": []
+}

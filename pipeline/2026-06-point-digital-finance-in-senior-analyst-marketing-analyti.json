@@ -1,0 +1,36 @@
+{
+  "id": "2026-06-point-digital-finance-in-senior-analyst-marketing-analyti",
+  "company": "Point Digital Finance, Inc.",
+  "title": "Senior Analyst, Marketing Analytics",
+  "source": "indeed",
+  "url": "https://www.indeed.com/viewjob?jk=5dde747a3d5941d2",
+  "location": "Remote (US states only)",
+  "comp": "$91,200 - $121,800 a year",
+  "state": "scored",
+  "score": {
+    "total": 75,
+    "fit": 9,
+    "comp": 10,
+    "visa": 2,
+    "remote": 8,
+    "growth": 8,
+    "confidence": "high",
+    "notes": "fit 9: Senior Analyst, Marketing Analytics — strong SQL, dbt (required), Sigma/Tableau dashboards, attribution/incrementality, A/B + cohort work, fintech domain — maps to churn-cohort-analysis, outreach-reallocation (channel-ROI reallocation), self-serve-dashboards, and reporting-turnaround; fintech is a target domain. comp 10: $91-122k, above target. visa 2 (high conf): BLOCKER — posting explicitly requires residence in specific US states; not accessible remote-from-Ethiopia without relocation/US work authorization. remote 8: the role itself is fully remote. growth 8: well-funded fintech ($175M raised), modern stack (dbt, Sigma). Weighted: 9*3+10*2+2*2+8*1.5+8*1.5 = 27+20+4+12+12 = 75 → standard. Best fit+comp of the batch, but the US-residency requirement is a hard blocker — flag for human."
+  },
+  "history": [
+    {
+      "state": "discovered",
+      "date": "2026-06-04"
+    },
+    {
+      "state": "scored",
+      "date": "2026-06-04"
+    }
+  ],
+  "next_action": {
+    "action": "Flag for human: best fit/comp but US-residency requirement is a hard blocker",
+    "due": "2026-06-09"
+  },
+  "contacts": [],
+  "artifacts": []
+}
