@@ -48,6 +48,45 @@ def build_report(entries) -> str:
             lines.append(f"| {s} | {counts[s]} |")
     lines.append("")
 
+    # Pipeline grouped by state — each opportunity with its score and next action.
+    lines.append("## Pipeline by state")
+    lines.append("")
+    by_state: dict[str, list] = {}
+    for _, d in entries:
+        by_state.setdefault(d.get("state", "?"), []).append(d)
+    any_listed = False
+    for s in STATES + TERMINAL_STATES:
+        group = by_state.get(s)
+        if not group:
+            continue
+        any_listed = True
+        lines.append(f"### {s} ({len(group)})")
+        group.sort(
+            key=lambda d: d["score"]["total"] if isinstance(d.get("score"), dict)
+            and isinstance(d["score"].get("total"), int) else -1,
+            reverse=True,
+        )
+        for d in group:
+            score = d["score"]["total"] if isinstance(d.get("score"), dict) and isinstance(
+                d["score"].get("total"), int) else "—"
+            na = d.get("next_action") or {}
+            due = na.get("due", "")
+            flag = ""
+            if is_iso_date(due) and s not in TERMINAL_STATES:
+                if due < today:
+                    flag = " ⚠️ OVERDUE"
+                elif due == today:
+                    flag = " ▶ due today"
+            action = na.get("action", "—")
+            due_str = f" (due {due}{flag})" if due else ""
+            lines.append(
+                f"- **{score}** · {d.get('company','')} — {d.get('title','')} · {action}{due_str}"
+            )
+        lines.append("")
+    if not any_listed:
+        lines.append("_No opportunities yet._")
+        lines.append("")
+
     active = [(p, d) for p, d in entries if d.get("state") not in TERMINAL_STATES]
 
     # Top-scored active opportunities.

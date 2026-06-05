@@ -1,22 +1,24 @@
 ---
-description: Advance an opportunity to its next state (appends history, enforces the Human Gate).
+description: Advance an opportunity to its next state (validated, idempotent; enforces the Human Gate).
 argument-hint: <opportunity-id> [target-state]
 ---
 
-Advance the opportunity `$ARGUMENTS` to its next state.
+Advance the opportunity `$ARGUMENTS`.
 
-1. Read `pipeline/<id>.json`. Determine the next state: the linear flow is
-   `discovered → scored → tailored → applied → screening → interview → offer`, plus the
-   terminal branch states `rejected`, `ghosted`, and `withdrawn` (reachable from any active
-   state). If the user named a specific target state, use that; otherwise use the next linear
-   state. Never skip a forward state (e.g. `discovered → tailored` without a score).
-2. **HUMAN GATE:** if the target state is `applied`, you must NOT proceed automatically.
-   Confirm with the human that *they* have reviewed the staged artifacts and submitted the
-   application. Only after explicit confirmation may you set `state` to `applied`.
-3. Append `{state: <new>, date: <today>}` to `history[]`, set `state`, and update
-   `next_action` to the sensible next step (e.g. moving to `applied` → set a follow-up;
-   `screening` → `/prep`).
-4. Run `python scripts/validate.py` to confirm the entry is still valid, then summarize the
-   transition.
+Run the validated transition helper (it enforces the kernel state machine — forward one step
+or to a terminal state; no skipping, no backward, no leaving a terminal — and is idempotent):
 
-Never skip states silently or overwrite history — it is append-only.
+```bash
+python scripts/advance.py <id> [target-state]
+```
+
+- With no target, it moves to the next linear state. With a target, it must be the next linear
+  state or a terminal one (`rejected`/`ghosted`/`withdrawn`); illegal moves are refused.
+- It appends `{state, date: today}` to `history[]` (append-only), sets `state`, and sets a
+  sensible `next_action` with a date computed from today. Re-running to the same state is a
+  safe no-op.
+- **HUMAN GATE:** advancing into `applied` is refused here. That move only happens through
+  `/submit` after the human confirms they submitted — relay that and stop if asked to.
+
+After it runs, relay the helper's message and run `python scripts/validate.py` to confirm the
+entry is still valid.

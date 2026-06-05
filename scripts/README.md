@@ -33,11 +33,32 @@ python scripts/scan_ingest.py --input pipeline/_raw/_incoming.json --cap 25
 ```
 
 ## `report.py` — pipeline dashboard  (`/status`)
-Reads all `pipeline/*.json`, prints a markdown dashboard (counts by state, top-scored
-active opportunities, overdue/due next-actions) and writes `reports/pipeline-<today>.md`.
+Reads all `pipeline/*.json`, prints a markdown dashboard (counts by state, the pipeline
+grouped by state with each opportunity's score + next_action, top-scored active, and
+overdue/due next-actions) and writes `reports/pipeline-<today>.md`.
 
 ```bash
 python scripts/report.py
+```
+
+## `advance.py` — validated state transition  (`/advance`, `/submit`)
+Transitions `pipeline/<id>.json` to a new state with the kernel rules enforced: forward one
+step or to a terminal state (`rejected`/`ghosted`/`withdrawn`); no skipping, no backward, no
+leaving a terminal. Appends `{state, date: today}` to `history[]` (append-only) and sets a
+sensible `next_action` with a date from today (e.g. `applied` → +7-day follow-up). Idempotent
+(advancing to the current state is a no-op). Advancing into `applied` requires `--confirm`
+(the human gate; `/submit` passes it).
+
+```bash
+python scripts/advance.py <id> [target_state] [--confirm] [--action "…"] [--due YYYY-MM-DD]
+```
+
+## `followups.py` — due/overdue list  (`/followups`)
+Lists every active opportunity whose `next_action.due` is today or earlier (excludes terminal
+states, oldest-first, flagged OVERDUE/due today). Read-only.
+
+```bash
+python scripts/followups.py
 ```
 
 ## `validate_corpus.py` — corpus linter + health report
