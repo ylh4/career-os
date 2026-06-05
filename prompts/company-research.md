@@ -7,7 +7,11 @@ version: 1.0
 **Invoked by:** `/prep [id]` (the company brief is built as part of interview prep).
 **Reads:** `pipeline/<id>.json` (company, title, source)
 **Writes:** `artifacts/<id>/research.md`; registers it in `artifacts[]`.
-**May use:** the Apify RAG Web Browser (and web search/fetch) to gather current facts.
+**Research engine:** the **Apify RAG Web Browser** Actor — `apify/rag-web-browser` (call it via
+the Apify MCP `apify--rag-web-browser` tool, or `call-actor` with `apify/rag-web-browser`).
+Query it for the company + role (e.g. "<Company> careers / funding / product / recent news");
+it returns page content you cite. Fall back to plain web search/fetch only if needed. Watch
+compute cost; a couple of focused queries is plenty.
 
 Produce a structured, **cited** research brief on the company and role. This brief becomes
 the provenance source for company facts used by `/tailor` (cover letter) and `/prep`.

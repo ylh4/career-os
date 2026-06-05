@@ -1,9 +1,14 @@
+---
+name: Priya Raman
+role: Analytics Manager
+company: DataCo
+relationship: hiring-manager
+last_touch: 2026-05-21
+next_touch: 2026-06-02
+---
 # Priya Raman
 
-- **Role:** Analytics Manager, DataCo (hiring manager)
-- **Email:**
-- **Source:** Named in the DataCo Senior BI Analyst posting.
-- **Opportunities:** [[2026-05-dataco-senior-bi]]
+[[2026-05-dataco-senior-bi]] · Hiring manager for the remote Senior BI Analyst role.
 
-## Notes
-Hiring manager for the remote Senior BI Analyst role. No direct contact yet.
+## Interactions
+- 2026-05-21 — Identified as the hiring manager named in the DataCo posting. No direct contact yet.

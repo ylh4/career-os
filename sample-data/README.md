@@ -21,13 +21,17 @@ roles. His corpus shows the full format and a realistic remote-vs-onsite scoring
   fully remote, top fit), `2026-05-fintrack-bi-lead` (**tailored** 74, hybrid/relocation), and
   `2026-06-meridian-sr-bi` (**tailored** 88, remote, priority — the `/tailor` demo). Ids follow
   the kernel `YYYY-MM-<company>-<role>` convention.
-- `contacts/` — one `.md` per person referenced by a pipeline file (`priya-raman`,
-  `selam-tesfaye`, `sara-mehari`).
-- `artifacts/<id>/` — staged `/tailor` output: `resume_v1.md`, `cover_v1.md`, `provenance.md`
-  (and a `research.md` brief for Meridian) — the tracked, reviewable sources. The `.docx`
-  deliverables are gitignored render outputs; regenerate with e.g.
+- `contacts/` — one `.md` per person, frontmatter `{name, role, company, relationship,
+  last_touch, next_touch}` + an `## Interactions` log (`priya-raman` — overdue touch demo,
+  `selam-tesfaye`, `sara-mehari`). `relationship: recommender` doubles the file as a
+  reference / recommendation-letter tracker.
+- `artifacts/<id>/` — staged `/tailor` + `/prep` output: `resume_v1.md`, `cover_v1.md`,
+  `provenance.md`, and (for Meridian) a `research.md` brief and `prep.md` interview prep — the
+  tracked, reviewable sources. The `.docx` deliverables are gitignored render outputs;
+  regenerate with e.g.
   `python scripts/render_docx.py sample-data/artifacts/2026-06-meridian-sr-bi/resume_v1.md sample-data/artifacts/2026-06-meridian-sr-bi/cover_v1.md`.
-  `2026-06-meridian-sr-bi/provenance.md` is the worked example of the provenance map + GAP list.
+  `2026-06-meridian-sr-bi/` is the worked example: `provenance.md` (provenance map + GAP list)
+  and `prep.md` (questions paired with story/accomplishment hooks).
 
 ## Use it as a demo
 From the repo root, lint the corpus and drive the pipeline helpers against this data:

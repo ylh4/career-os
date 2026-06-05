@@ -88,6 +88,12 @@ Visa default: if sponsorship is unstated, score ≤ 5 with `confidence: low` and
 
 `corpus/accomplishments/<slug>.md` — frontmatter `{metric, tags[], date, source}` + body containing a STAR story. `metric` is required and concrete ("-62% reporting turnaround", "$1.2M reallocated"). `scripts/validate_corpus.py` must pass before any generation; refuse to `/tailor` on a failing corpus.
 
+## Contacts format
+
+`contacts/<slug>.md` — frontmatter `{name, role, company, relationship, last_touch, next_touch}` (ISO dates) + a `# Name` body and an append-only `## Interactions` log. `/touch` (→ `scripts/touch.py`) logs an interaction and stamps `last_touch`/`next_touch`; `/followups` surfaces contacts whose `next_touch` has arrived alongside application follow-ups.
+
+**Double purpose:** this same file is the reference / recommendation-letter tracker. A recommender is just a contact with `relationship: recommender` — use the `## Interactions` log to record whether they've agreed to write, which roles you've asked them for, and when you last nudged them; `/followups` then keeps recommendation chases on cadence exactly like networking touches.
+
 ---
 
 ## Commands

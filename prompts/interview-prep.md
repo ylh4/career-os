@@ -16,8 +16,11 @@ company brief exists: if `artifacts/<id>/research.md` is missing, produce it now
 ## Sections to produce
 1. **Role & company snapshot** — 3–5 bullets from the research brief (cited). What they do,
    recent news, likely priorities for this role.
-2. **Likely questions** — behavioral + technical, derived from the JD and domain. For each
-   behavioral question, name the best-matching `stories/` file (by its themes).
+2. **Likely questions, each with an answer hook** — behavioral + technical, derived from the JD
+   and domain. Pair every question with a hook: behavioral questions → the best-matching
+   `stories/` file (by its `themes`), naming the story and its Result metric; technical/role
+   questions → a specific `accomplishments/` file. Format: `Q → hook (story/accomplishment + metric)`.
+   If a likely question has no corpus hook, say so plainly (a candid-answer prompt, not a fabrication).
 3. **STAR bank** — pull the relevant stories into tight, deliverable form (Situation→Result),
    keeping metrics exactly as in the corpus.
 4. **Questions to ask them** — thoughtful, specific to the company/role and the candidate's

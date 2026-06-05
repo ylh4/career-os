@@ -32,65 +32,11 @@ import re
 import sys
 from pathlib import Path
 
-from _schema import ROOT
+from _schema import ROOT, parse_frontmatter
 
 REQUIRED_KEYS = ["metric", "tags", "date", "source"]
 STAR_MARKERS = ["situation", "task", "action", "result"]
 DATE_RE = re.compile(r"^\d{4}-\d{2}(-\d{2})?$")
-
-
-def parse_frontmatter(text: str) -> tuple[dict, str]:
-    """Return (frontmatter_dict, body). Frontmatter is {} if absent.
-
-    Supports `key: value` and inline list `tags: [a, b]` plus YAML block lists
-    (subsequent `- item` lines). Quotes around scalar values are stripped.
-    """
-    if not text.startswith("---"):
-        return {}, text
-    # Split off the frontmatter block between the first two `---` fences.
-    parts = text.split("\n")
-    if parts[0].strip() != "---":
-        return {}, text
-    end = None
-    for i in range(1, len(parts)):
-        if parts[i].strip() == "---":
-            end = i
-            break
-    if end is None:
-        return {}, text  # unterminated frontmatter -> treat as no frontmatter
-
-    fm: dict = {}
-    current_key: str | None = None
-    for raw in parts[1:end]:
-        line = raw.rstrip()
-        if not line.strip():
-            continue
-        # Continuation of a block list (e.g. tags: then "- sql").
-        if line.lstrip().startswith("- ") and current_key:
-            fm.setdefault(current_key, [])
-            if isinstance(fm[current_key], list):
-                fm[current_key].append(_strip(line.lstrip()[2:]))
-            continue
-        if ":" not in line:
-            continue
-        key, _, value = line.partition(":")
-        key = key.strip()
-        value = value.strip()
-        current_key = key
-        if value == "":
-            fm[key] = []  # likely a block list to follow
-        elif value.startswith("[") and value.endswith("]"):
-            inner = value[1:-1].strip()
-            fm[key] = [_strip(v) for v in inner.split(",")] if inner else []
-        else:
-            fm[key] = _strip(value)
-
-    body = "\n".join(parts[end + 1 :])
-    return fm, body
-
-
-def _strip(value: str) -> str:
-    return value.strip().strip('"').strip("'").strip()
 
 
 def body_text(body: str) -> str:

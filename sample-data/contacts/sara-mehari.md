@@ -1,9 +1,14 @@
+---
+name: Sara Mehari
+role: Analytics Manager
+company: Meridian Health
+relationship: referrer
+last_touch: 2026-06-01
+next_touch: 2026-06-22
+---
 # Sara Mehari
 
-- **Role:** Analytics Manager, Meridian Health (referrer)
-- **Email:**
-- **Source:** Former colleague; offered to refer.
-- **Opportunities:** [[2026-06-meridian-sr-bi]]
+[[2026-06-meridian-sr-bi]] · Former colleague; offered to refer.
 
-## Notes
-Referred Dawit for the Senior BI Analyst role.
+## Interactions
+- 2026-06-01 — Offered to refer Dawit for the Senior BI Analyst role.

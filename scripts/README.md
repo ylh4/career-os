@@ -54,11 +54,22 @@ python scripts/advance.py <id> [target_state] [--confirm] [--action "…"] [--du
 ```
 
 ## `followups.py` — due/overdue list  (`/followups`)
-Lists every active opportunity whose `next_action.due` is today or earlier (excludes terminal
-states, oldest-first, flagged OVERDUE/due today). Read-only.
+Two sections: **application follow-ups** (active opportunities whose `next_action.due` has
+arrived) and **contact touches** (people in `contacts/` whose `next_touch` has arrived), both
+oldest-first and flagged OVERDUE/due-today. Read-only.
 
 ```bash
 python scripts/followups.py
+```
+
+## `touch.py` — log a contact interaction  (`/touch`)
+Creates/updates `contacts/<slug>.md` (frontmatter `{name, role, company, relationship,
+last_touch, next_touch}` + an append-only `## Interactions` log), stamps `last_touch`=today and
+`next_touch`=today+cadence (default 28). The same records double as reference /
+recommendation-letter trackers (`--relationship recommender`).
+
+```bash
+python scripts/touch.py sara-mehari --note "Coffee chat; will intro me to the hiring manager"
 ```
 
 ## `save_session.py` — capture a login session  (`/prefill`)
