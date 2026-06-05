@@ -8,7 +8,10 @@
       "type": "stdio",
       "command": "npx",
       "args": [
-        "@playwright/mcp@latest"
+        "@playwright/mcp@latest",
+        "--headed",
+        "--user-data-dir",
+        ".auth/pw-profile"
       ],
       "env": {}
     }

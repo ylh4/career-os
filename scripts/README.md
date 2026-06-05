@@ -61,6 +61,17 @@ states, oldest-first, flagged OVERDUE/due today). Read-only.
 python scripts/followups.py
 ```
 
+## `save_session.py` — capture a login session  (`/prefill`)
+You run this once, by hand, for sites that require a login. It opens a visible browser using
+the persistent profile `.auth/pw-profile` (the same `--user-data-dir` the Playwright MCP uses),
+you log in yourself, and the cookies persist there so `/prefill` finds you signed in. No
+passwords are ever scripted or echoed; `.auth/` is gitignored. One-time setup:
+`pip install playwright && playwright install chromium` (only needed for login-gated sites).
+
+```bash
+python scripts/save_session.py https://www.linkedin.com/login
+```
+
 ## `validate_corpus.py` — corpus linter + health report
 Lints accomplishment files (frontmatter `{metric, tags, date, source}` + a non-empty
 STAR body) and prints a health report: per-file ✓/⚠/✗, totals, date range, and tag

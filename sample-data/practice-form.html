@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--
+  Local practice application form for testing /prefill safely (offline, no live posting).
+  Open via file:// in the Playwright MCP. /prefill should fill the named fields, attach a
+  resume to #resume, and STOP at the submit button (never click it).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Practice Application — Acme Demo (test only)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; }
+    label { display: block; margin: 0.8rem 0 0.2rem; font-weight: 600; }
+    input, textarea { width: 100%; padding: 0.4rem; font-size: 1rem; }
+    button { margin-top: 1.2rem; padding: 0.6rem 1.2rem; font-size: 1rem; }
+    .note { color: #666; font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <h1>Senior BI Analyst — Application (practice form)</h1>
+  <p class="note">Test fixture for /prefill. Nothing is submitted anywhere.</p>
+
+  <form id="application" onsubmit="document.getElementById('done').textContent='SUBMITTED'; return false;">
+    <label for="fullName">Full name</label>
+    <input id="fullName" name="fullName" type="text" autocomplete="name" />
+
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" />
+
+    <label for="phone">Phone</label>
+    <input id="phone" name="phone" type="tel" autocomplete="tel" />
+
+    <label for="location">Location</label>
+    <input id="location" name="location" type="text" />
+
+    <label for="linkedin">LinkedIn / portfolio URL</label>
+    <input id="linkedin" name="linkedin" type="url" />
+
+    <label for="resume">Resume (file)</label>
+    <input id="resume" name="resume" type="file" accept=".docx,.pdf" />
+
+    <label for="coverNote">Cover note</label>
+    <textarea id="coverNote" name="coverNote" rows="4"></textarea>
+
+    <button id="submitBtn" type="submit">Submit application</button>
+  </form>
+
+  <p id="done" class="note"></p>
+</body>
+</html>

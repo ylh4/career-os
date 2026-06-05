@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# Browser auth (cookies / saved login sessions captured by save_session.py) — never commit
+.auth/
+
 # Python
 .venv/
 __pycache__/
